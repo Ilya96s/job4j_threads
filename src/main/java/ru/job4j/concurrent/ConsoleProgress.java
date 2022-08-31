@@ -22,7 +22,7 @@ public class ConsoleProgress implements Runnable {
                     Thread.sleep(500);
                     LOG.info("\r Load: {} ", value);
                 } catch (InterruptedException e) {
-                    LOG.error("InterruptedException ", e);
+                    Thread.currentThread().interrupt();
                 }
             }
         }
