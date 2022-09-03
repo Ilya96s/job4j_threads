@@ -5,7 +5,7 @@ package ru.job4j.linked;
  * @param <T> Обрабатываемый тип данных
  * @author Ilya Kaltygin
  */
-public class Node<T> {
+public final class Node<T> {
     private final Node<T> next;
     private final T value;
 
