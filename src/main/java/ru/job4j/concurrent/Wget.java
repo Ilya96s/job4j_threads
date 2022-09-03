@@ -16,11 +16,14 @@ public class Wget implements Runnable {
 
     private final String url;
     private final int speed;
+    private final String fileName;
     private static final Logger LOG = LoggerFactory.getLogger(Wget.class.getName());
+    private static final int ONE_SECOND = 1000;
 
-    public Wget(String url, int speed) {
+    public Wget(String url, int speed, String fileName) {
         this.url = url;
         this.speed = speed;
+        this.fileName = fileName;
     }
 
     /**
@@ -29,17 +32,23 @@ public class Wget implements Runnable {
     @Override
     public void run() {
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream("pom_tmp.xml")) {
+             FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
+            int downLoadData = 0;
             long start = System.currentTimeMillis();
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                long finish = System.currentTimeMillis();
-                if ((finish - start) < speed) {
-                    try {
-                        Thread.sleep(speed - (finish - start));
-                    } catch (InterruptedException e) {
-                        LOG.error("InterruptedException", e);
+                downLoadData += bytesRead;
+                if (downLoadData >= speed) {
+                    long finish = System.currentTimeMillis();
+                    if ((finish - start) < ONE_SECOND) {
+                        try {
+                            Thread.sleep(ONE_SECOND - (finish - start));
+                        } catch (InterruptedException e) {
+                            LOG.error("InterruptedException", e);
+                        }
+                        downLoadData = 0;
+                        start = System.currentTimeMillis();
                     }
                 }
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
@@ -54,8 +63,10 @@ public class Wget implements Runnable {
      * @param args Массив параметров
      */
     private static void validate(String[] args) {
-        if (args.length < 2) {
-            throw new IllegalArgumentException("Invalid input parameters. You need write 2 parameters: URL, SPEED");
+        if (args.length < 3) {
+            throw new IllegalArgumentException("Invalid input parameters. "
+                    + "You need write 3 parameters: url, speed(bytes/second), fileName. "
+                    + "For example: https://proof.ovh.net/files/10Mb.dat 1048576 exampleFile.xml");
         }
     }
 
@@ -63,7 +74,8 @@ public class Wget implements Runnable {
         validate(args);
         String url = args[0];
         int speed = Integer.parseInt(args[1]);
-        Thread wget = new Thread(new Wget(url, speed));
+        String fileName = args[2];
+        Thread wget = new Thread(new Wget(url, speed, fileName));
         wget.start();
         try {
             wget.join();
