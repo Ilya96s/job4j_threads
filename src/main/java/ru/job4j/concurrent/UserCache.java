@@ -1,6 +1,7 @@
 package ru.job4j.concurrent;
 
-import net.jcip.annotations.NotThreadSafe;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
  *
  * @author Ilya Kaltygin
  */
-@NotThreadSafe
+@ThreadSafe
 public class UserCache {
     private final ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<Integer, User>();
     private final AtomicInteger id = new AtomicInteger();
