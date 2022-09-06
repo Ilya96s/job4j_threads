@@ -59,12 +59,13 @@ public class AccountStorage {
      * @return       true если перевод выполнен, иначе false;
      */
     public synchronized boolean transfer(int fromId, int toId, int amount) {
+        boolean rsl = false;
         Optional<Account> fromAc = getById(fromId);
         Optional<Account> toAc = getById(toId);
-        if (fromAc.isEmpty() || toAc.isEmpty() || fromAc.get().amount() < amount) {
-            return false;
+        if (fromAc.isPresent() && toAc.isPresent() && fromAc.get().amount() >= amount) {
+            rsl = update(new Account(fromId, fromAc.get().amount() - amount))
+                    && update(new Account(toId, toAc.get().amount() + amount));
         }
-        return update(new Account(fromId, fromAc.get().amount() - amount))
-                && update(new Account(toId, toAc.get().amount() + amount));
+        return rsl;
     }
 }
