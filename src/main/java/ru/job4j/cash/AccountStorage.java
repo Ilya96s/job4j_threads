@@ -21,7 +21,7 @@ public class AccountStorage {
      * @return        true если добавили, иначе false
      */
     public synchronized boolean add(Account account) {
-        return accounts.putIfAbsent(account.id(), account) != null;
+        return accounts.putIfAbsent(account.id(), account) == null;
     }
 
     /**
