@@ -29,14 +29,10 @@ public class SimpleBlockingQueue<T> {
      * Метод помещает объект в коллекцию, если коллекция заполнена нужно перевести нить в состояние ожидания
      * @param value Добавляемый объект
      */
-    public void offer(T value) {
+    public void offer(T value) throws InterruptedException {
         synchronized (this) {
             while (queue.size() >= limit) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                wait();
             }
             queue.offer(value);
             notify();
@@ -46,14 +42,10 @@ public class SimpleBlockingQueue<T> {
     /**
      * Метод возвращает объект из внутренней коллекци, если в коллекции нет объектов, то нить переводится в состояние ожидания
      */
-    public T pool() {
+    public T pool() throws InterruptedException {
         synchronized (this) {
             while (queue.isEmpty()) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                wait();
             }
             notify();
             return queue.poll();

@@ -8,7 +8,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- *
+ * @author Ilya Kaltygin
  */
 class SimpleBlockingQueueTest {
 
@@ -19,7 +19,11 @@ class SimpleBlockingQueueTest {
         Thread producer = new Thread(
                 () -> {
                     for (int i = 0; i < 15; i++) {
-                        queue.offer(i);
+                        try {
+                            queue.offer(i);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
                     }
                 }
         );
@@ -27,8 +31,12 @@ class SimpleBlockingQueueTest {
         Thread consumer = new Thread(
                 () -> {
                     while (list.size() < 15) {
-                        Integer i = queue.pool();
-                        list.add(i);
+                        try {
+                            Integer i = queue.pool();
+                            list.add(i);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
                     }
                 }
         );
