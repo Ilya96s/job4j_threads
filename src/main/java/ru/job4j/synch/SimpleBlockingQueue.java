@@ -44,11 +44,21 @@ public class SimpleBlockingQueue<T> {
      */
     public T pool() throws InterruptedException {
         synchronized (this) {
-            while (queue.isEmpty()) {
+            while (isEmpty()) {
                 wait();
             }
             notify();
             return queue.poll();
+        }
+    }
+
+    /**
+     * Проверяет содержит ли коллекция элементы
+     * @return true если коллекция пустая, иначе false
+     */
+    public boolean isEmpty() {
+        synchronized (this) {
+            return queue.isEmpty();
         }
     }
 }
