@@ -53,7 +53,7 @@ class SimpleBlockingQueueTest {
     void whenFetchAllThenGetIt() throws InterruptedException {
         /* buffer - нужен, чтобы собрать все данные в список и проверить их в конце выполнения теста.*/
         final CopyOnWriteArrayList<Integer> buffer = new CopyOnWriteArrayList<>();
-        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(15);
+        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(5);
         Thread producer = new Thread(
                 () -> {
                     for (int i = 0; i < 5; i++) {
