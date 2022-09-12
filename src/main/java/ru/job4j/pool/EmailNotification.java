@@ -18,11 +18,11 @@ public class EmailNotification {
      * @param user Объект типа User
      */
     public void emailTo(User user) {
-        String subject = String.format("Notification {%s} to email {%s} ", user.getUsername(), user.getEmail());
-        String body = String.format("Add a new evet to {%s} ", user.getUsername());
         pool.submit(new Runnable() {
             @Override
             public void run() {
+                String subject = String.format("Notification {%s} to email {%s} ", user.getUsername(), user.getEmail());
+                String body = String.format("Add a new event to {%s} ", user.getUsername());
                 send(subject, body, user.getEmail());
                 System.out.println(Thread.currentThread().getName());
             }
@@ -35,6 +35,13 @@ public class EmailNotification {
      */
     public void close() {
         pool.shutdown();
+        while (!pool.isTerminated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void send(String subject, String body, String email) {
