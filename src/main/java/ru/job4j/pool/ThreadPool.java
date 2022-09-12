@@ -13,7 +13,7 @@ import java.util.List;
 public class ThreadPool {
     private final int size = Runtime.getRuntime().availableProcessors();
     private final List<Thread> thread = new LinkedList<>();
-    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(50);
+    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(size);
 
     /**
      * Инициализация пула должны быть по кол-ву ядер в системе
