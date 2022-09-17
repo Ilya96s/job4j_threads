@@ -11,7 +11,6 @@ import java.util.concurrent.RecursiveTask;
  * @author Ilya Kaltygin
  */
 public class ParallelIndexOf<T> extends RecursiveTask<Integer> {
-    private static final int FALSE = -1;
     private final T target;
     private final T[] array;
     private final int indexFrom;
@@ -28,9 +27,9 @@ public class ParallelIndexOf<T> extends RecursiveTask<Integer> {
      * Метод возвращает индекс указанного объекта
      */
     public int returnIndex() {
-        int rsl = FALSE;
+        int rsl = -1;
         for (int i = indexFrom; i <= indexTo; i++) {
-            if (array[i] == target) {
+            if (array[i].equals(target)) {
                 rsl = i;
                 break;
             }
@@ -56,8 +55,8 @@ public class ParallelIndexOf<T> extends RecursiveTask<Integer> {
         return Math.max(left, right);
     }
 
-    public static <T> int findIndex(T target, T[] array) {
+    public static <T> int findIndex(T target, T[] array, int indexFrom, int indexTo) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        return forkJoinPool.invoke(new ParallelIndexOf<>(target, array, 0, array.length - 1));
+        return forkJoinPool.invoke(new ParallelIndexOf<>(target, array, indexFrom, indexTo));
     }
 }
