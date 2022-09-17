@@ -55,8 +55,8 @@ public class ParallelIndexOf<T> extends RecursiveTask<Integer> {
         return Math.max(left, right);
     }
 
-    public static <T> int findIndex(T target, T[] array, int indexFrom, int indexTo) {
+    public static <T> int findIndex(T target, T[] array) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        return forkJoinPool.invoke(new ParallelIndexOf<>(target, array, indexFrom, indexTo));
+        return forkJoinPool.invoke(new ParallelIndexOf<>(target, array, 0, array.length - 1));
     }
 }
