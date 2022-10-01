@@ -17,5 +17,6 @@ public class App {
         LOG.info("info message");
         LOG.warn("warn message");
         LOG.error("error message");
+
     }
 }
