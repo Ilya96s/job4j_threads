@@ -14,3 +14,5 @@
 Telegram: https://t.me/ilya96s
 
 GitHub: https://github.com/Ilya96s
+
+# В курсе производилась работа с ветками git.
