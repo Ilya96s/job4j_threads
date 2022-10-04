@@ -16,3 +16,5 @@ Telegram: https://t.me/ilya96s
 GitHub: https://github.com/Ilya96s
 
 "Объединение зафиксированных изменений
+
+# В курсе производилась работа с ветками git.
